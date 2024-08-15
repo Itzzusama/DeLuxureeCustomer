@@ -1,0 +1,100 @@
+{
+  "project_info": {
+    "project_number": "157599591616",
+    "project_id": "deluxcleaning-f860b",
+    "storage_bucket": "deluxcleaning-f860b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157599591616:android:c6ae7c5282a893759b9125",
+        "android_client_info": {
+          "package_name": "com.deeluxreecustomer.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157599591616-gsli6j34gdqcgudkbe529jnbco1d84bf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deeluxreecustomer.app",
+            "certificate_hash": "81eacac9d2a4a6e8b0b805f414e6fcd3c733b8f1"
+          }
+        },
+        {
+          "client_id": "157599591616-pjvvo7qhrjb4or31o9gkl2tkg1hqp44o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deeluxreecustomer.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSBxHC2I8l5_0m0FK_uW7dMTwvBP6fqPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157599591616:android:120d6ff95a1e38319b9125",
+        "android_client_info": {
+          "package_name": "com.deeluxreeserviceprovider.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157599591616-3s449svqdsrfg0ttp0s0fua2inbif37m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deeluxreeserviceprovider.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "157599591616-8e4r5adm8sk8nlq7bmb8kajdd9rdak16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deeluxreeserviceprovider.app",
+            "certificate_hash": "81eacac9d2a4a6e8b0b805f414e6fcd3c733b8f1"
+          }
+        },
+        {
+          "client_id": "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSBxHC2I8l5_0m0FK_uW7dMTwvBP6fqPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
