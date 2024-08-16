@@ -25,6 +25,7 @@ const BookingDetail = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { orderDetail } = route.params || {};
+  console.log(orderDetail);
   const color =
     orderDetail?.status === "completed"
       ? colors.green
@@ -199,7 +200,7 @@ const BookingDetail = () => {
               color={colors.black}
               fontFamily={fonts.bold}
             />
-            {orderDetail?.status == "completed" && (
+            {orderDetail?.status == "completed" && orderDetail.rating == 0 && (
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("Review", { detail: orderDetail });
