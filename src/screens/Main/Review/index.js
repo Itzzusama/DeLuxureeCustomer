@@ -42,7 +42,9 @@ const Review = () => {
       const res = await post("rating/create", ApiData);
       if (res.data.success) {
         ToastMessage("Feedback submitted!");
-        navigation.navigate("HomeStack", { screen: "Orders" });
+        navigation.navigate("HomeStack");
+      } else {
+        ToastMessage(res.data.message);
       }
     } catch (err) {
       console.log(er);
@@ -65,7 +67,13 @@ const Review = () => {
         />
       }
     >
-      <ServiceCard item={detail?.service} isPast isCompleted isOrder />
+      <ServiceCard
+        item={detail?.service}
+        isPast
+        isCompleted
+        isOrder
+        order={detail}
+      />
       <CustomText
         alignSelf={"center"}
         label={"How was your experience?"}

@@ -30,6 +30,7 @@ export const Images = {
   noShow: require("./noShow.png"),
   noNotification: require("./noNotification.png"),
   sendButton: require("./sendButton.png"),
+  clip: require("./clipboard.png"),
 };
 
 // svgs ---------------------------

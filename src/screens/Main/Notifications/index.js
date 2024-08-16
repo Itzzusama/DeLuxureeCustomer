@@ -106,11 +106,7 @@ const Notifications = () => {
               title={item?.title}
               description={item?.description}
               time={moment(item?.createdAt).fromNow()}
-              source={
-                item.color == "red"
-                  ? Images.notification1
-                  : Images.notification2
-              }
+              source={Images.clip}
             />
           )
         }

@@ -23,7 +23,7 @@ const PriceDetail = ({ price }) => {
           color={colors.blk2}
         />
         <CustomText
-          label={"$3"}
+          label={`$${price}`}
           fontSize={14}
           fontFamily={fonts.bold}
           color={colors.blk2}

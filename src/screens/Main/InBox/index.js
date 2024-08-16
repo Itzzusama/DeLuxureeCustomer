@@ -83,7 +83,7 @@ const Inbox = () => {
       socket.emit("send-message", {
         recipientId: data?.id,
         messageText: inputText,
-        name: users?.name,
+        name: userData?.name,
       });
       setInputText("");
     } else {

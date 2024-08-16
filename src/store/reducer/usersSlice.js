@@ -5,6 +5,7 @@ const initialState = {
   loginUser: {},
   userType: "",
   token: "",
+  modal: false,
 };
 
 export const usersSlice = createSlice({
@@ -23,6 +24,9 @@ export const usersSlice = createSlice({
     setToken: (state, action) => {
       state.token = action.payload;
     },
+    setModal(state, action) {
+      state.modal = action.payload;
+    },
   },
 });
 
@@ -31,6 +35,7 @@ export const {
   userLogout,
   setUserType,
   setToken,
+  setModal,
 } = usersSlice.actions;
 
 export const getUserProfile = async (dispatch) => {

@@ -230,10 +230,13 @@ const BookingForm = () => {
               withLabel={"Location"}
               marginTop={5}
               value={values.location}
-              setValue={(location) => setFieldValue("location", location)}
+              setValue={(location) => {
+                setFieldValue("location", location);
+              }}
               placeholder={"Location"}
               setLatLong={(latLong) => {
                 setFieldValue("latLng", latLong);
+                console.log(latLong);
               }}
               error={touched.location && errors.location}
             />

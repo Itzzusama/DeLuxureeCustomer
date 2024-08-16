@@ -19,6 +19,7 @@ import { formatDate, formatTime } from "../../../utils/dateUtils";
 import { useStripe } from "@stripe/stripe-react-native";
 import { endPoints } from "../../../services/ENV";
 import { post } from "../../../services/ApiRequest";
+import { ToastMessage } from "../../../utils/ToastMessage";
 const ConfirmBooking = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const route = useRoute();
@@ -30,7 +31,6 @@ const ConfirmBooking = () => {
     const ApiData = {
       amount: Number(reqData?.amount),
     };
-    console.log(ApiData);
     try {
       const res = await post("payment/create", ApiData);
       const { customer, ephemeralKey, paymentIntent, paymentId } = res.data;
@@ -63,13 +63,17 @@ const ConfirmBooking = () => {
         ...reqData,
         paymentId: paymentId,
       };
+      console.log(ApiData);
       try {
         const res = await post("order/create", ApiData);
         if (res.data.success) {
           navigation.navigate("Orders", { screen: "Pending" });
+        } else {
+          ToastMessage(res.data.message);
         }
       } catch (err) {
-        console.log(err);
+        ToastMessage(err?.response?.data?.message);
+        console.log(err?.response?.data?.message);
       } finally {
         setLoading(false);
       }

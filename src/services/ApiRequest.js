@@ -3,11 +3,10 @@ import axios from "axios";
 
 import { endPoints } from "./ENV";
 import { store } from "../store";
-import { setToken, userLogout } from "../store/reducer/usersSlice";
+import { setModal, setToken, userLogout } from "../store/reducer/usersSlice";
 import { notiLogout } from "../store/reducer/unseenNotiSlice";
 import { servicesLogout } from "../store/reducer/servicesSlice";
 import { catLogout } from "../store/reducer/categorySlice";
-import { handleLogout } from "../utils/logoutHelper";
 
 const baseURL = endPoints.BASE_URL;
 
@@ -26,6 +25,7 @@ const createApi = () => {
     }
     return config;
   });
+
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
@@ -51,3 +51,13 @@ const createApi = () => {
   return { get, post, put, del };
 };
 export const { get, post, put, del } = createApi();
+const handleLogout = async () => {
+  await AsyncStorage.removeItem("token");
+  await AsyncStorage.removeItem("fcmToken");
+  store.dispatch(setToken(""));
+  store.dispatch(userLogout());
+  store.dispatch(notiLogout());
+  store.dispatch(servicesLogout());
+  store.dispatch(catLogout());
+  store.dispatch(setModal(true));
+};

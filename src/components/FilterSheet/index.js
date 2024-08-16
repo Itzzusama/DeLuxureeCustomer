@@ -53,6 +53,7 @@ const FilterSheet = ({ sheetRef, setFilterData }) => {
         lat: latLng?.latitude,
         lng: latLng?.longitude,
       };
+      console.log(body);
       const res = await post("service/filter", body);
       if (res.data.success) {
         setFilterData(res.data.services);

@@ -143,7 +143,7 @@ const Search = () => {
             />
           }
           keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => <ServiceCard item={item} showHeart />}
+          renderItem={({ item }) => <ServiceCard item={item} />}
           ListEmptyComponent={
             loading ? null : (
               <NoDataFound
