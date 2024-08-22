@@ -14,7 +14,7 @@ import Tab from "../../../components/TabBar";
 import ServiceCard from "../../../components/ServiceCard";
 import OfferCard from "../../../components/OfferCard";
 import { useDispatch, useSelector } from "react-redux";
-import { get } from "../../../services/ApiRequest";
+import { get, post } from "../../../services/ApiRequest";
 import NoDataFound from "../../../components/NoDataFound";
 import { fetchServices } from "../../../store/reducer/servicesSlice";
 import { useFocusEffect } from "@react-navigation/native";
@@ -58,7 +58,7 @@ const Home = () => {
     if (!text || text === "") {
       filterServices(selectedCategory);
     } else {
-      const filterServices = services.filter(
+      const filterServices = filterData?.filter(
         (service) =>
           service?.title.toLowerCase().includes(text) ||
           service?.cat?.name.toLowerCase().includes(text) ||
@@ -67,7 +67,23 @@ const Home = () => {
       setFilterData(filterServices);
     }
   };
+  const fetchMoreServices = async () => {
+    try {
+      const res = await post("service/filter", {
+        type: "all",
+        last_id: filterData[filterData.length - 1]._id,
+      });
 
+      if (res.data.success) {
+        const newServcies = res.data.services;
+        setFilterData([...filterData, ...newServcies]);
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Layout
       isHome
@@ -123,6 +139,8 @@ const Home = () => {
         <FlatList
           contentContainerStyle={className("pb-3")}
           data={filterData}
+          onEndReachedThreshold={0.2}
+          onEndReached={() => fetchMoreServices()}
           refreshControl={
             <RefreshControl
               refreshing={loading}

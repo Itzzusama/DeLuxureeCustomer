@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NoDataFound from "../../../components/NoDataFound";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchServices } from "../../../store/reducer/servicesSlice";
+import { post } from "../../../services/ApiRequest";
 const Search = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
@@ -63,7 +64,23 @@ const Search = () => {
       });
     }
   };
+  const fetchMoreServices = async () => {
+    try {
+      const res = await post("service/filter", {
+        type: "all",
+        last_id: filterData[filterData.length - 1]._id,
+      });
 
+      if (res.data.success) {
+        const newServcies = res.data.services;
+        setFilterData([...filterData, ...newServcies]);
+      } else {
+        console.log(res.data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Layout
       isSafeAreaView={true}
@@ -130,6 +147,8 @@ const Search = () => {
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
+          onEndReachedThreshold={(0, 2)}
+          onEndReached={() => fetchMoreServices()}
           contentContainerStyle={className("pb-3")}
           data={
             tab == "All Services"

@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 import { endPoints } from "./ENV";
 import { store } from "../store";
@@ -9,7 +13,10 @@ import { servicesLogout } from "../store/reducer/servicesSlice";
 import { catLogout } from "../store/reducer/categorySlice";
 
 const baseURL = endPoints.BASE_URL;
-
+GoogleSignin.configure({
+  webClientId:
+    "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com", // From Firebase Console
+});
 const createApi = () => {
   const instance = axios.create({
     baseURL,
@@ -56,8 +63,6 @@ const handleLogout = async () => {
   await AsyncStorage.removeItem("fcmToken");
   store.dispatch(setToken(""));
   store.dispatch(userLogout());
-  store.dispatch(notiLogout());
-  store.dispatch(servicesLogout());
-  store.dispatch(catLogout());
+  GoogleSignin.signOut();
   store.dispatch(setModal(true));
 };
