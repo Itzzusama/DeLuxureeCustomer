@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import jwt_decode from "jwt-decode";
-import { setUserType } from "../store/reducer/usersSlice";
+import { setToken, setUserType } from "../store/reducer/usersSlice";
 import { ToastMessage } from "./ToastMessage";
 import { post } from "../services/ApiRequest";
 
@@ -27,6 +27,7 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
     const userCredential = await auth().signInWithCredential(googleCredential);
 
     const email = userCredential.user.email;
+    console.log(email);
     const fcmtoken = await AsyncStorage.getItem("fcmToken");
     const reqData = {
       email: email,
@@ -34,9 +35,11 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
     };
     try {
       const response = await post("auth/social-login", reqData);
-      if (response.data?.token && response?.data?.user?.type == "customer") {
+      console.log(response);
+      if (response?.data?.token && response?.data?.user?.type == "customer") {
         await AsyncStorage.setItem("token", response.data?.token);
-        dispatch(setUserType(res.data.user.type));
+        dispatch(setUserType(response.data.user.type));
+        dispatch(setToken(response.data.token));
         navigation.reset({
           index: 0,
           routes: [
@@ -46,12 +49,13 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
           ],
         });
       } else {
-        ToastMessage(response?.data?.message);
+        ToastMessage("Invalid credentials");
         await GoogleSignin.signOut();
       }
     } catch (err) {
       await GoogleSignin.signOut();
-      ToastMessage(err?.response?.data?.message);
+      console.log(err);
+      ToastMessage(err?.response?.data?.error || "Something went wrong");
     }
   } catch (error) {
     await GoogleSignin.signOut();
@@ -90,7 +94,8 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
       console.log(response.data.user.type);
       if (response.data?.token && response?.data?.user?.type == "customer") {
         await AsyncStorage.setItem("token", response.data?.token);
-        dispatch(setUserType(res.data.user.type));
+        dispatch(setUserType(response.data.user.type));
+        dispatch(setToken(response.data.token));
         navigation.reset({
           index: 0,
           routes: [
@@ -100,10 +105,10 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
           ],
         });
       } else {
-        ToastMessage(response?.data?.message);
+        ToastMessage("Invalid credentials");
       }
     } catch (err) {
-      ToastMessage(err?.response?.data?.message);
+      ToastMessage(err?.response?.data?.message || "Something went wrong");
     }
   } catch (error) {
     ToastMessage("An error occurred during Apple sign in");

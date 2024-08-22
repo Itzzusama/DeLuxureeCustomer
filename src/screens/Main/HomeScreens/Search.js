@@ -34,7 +34,7 @@ const Search = () => {
     if (!text || text === "") {
       setFilterData(service);
     } else {
-      const filterServices = service.filter(
+      const filterServices = filterData.filter(
         (service) =>
           service?.title.toLowerCase().includes(text) ||
           service?.cat?.name.toLowerCase().includes(text) ||
@@ -53,7 +53,7 @@ const Search = () => {
 
   const fitAllMarkers = () => {
     if (service?.length > 0 && mapRef.current) {
-      const coordinates = service.map((service) => ({
+      const coordinates = filterData.map((service) => ({
         latitude: service.location.coordinates[1],
         longitude: service.location.coordinates[0],
       }));

@@ -112,7 +112,6 @@ const ServiceCard = ({
                   handleSaved();
                   setSaved(!saved);
                 }}
-                disabled={saving}
                 activeOpacity={0.8}
               >
                 <Icons

@@ -24,7 +24,8 @@ const checkEmail = async (email, setError) => {
       return true;
     }
   } catch (error) {
-    console.log("Error", error);
+    console.log("Error", error.response.data.message);
+
     setError({
       emailError: true,
       show: true,

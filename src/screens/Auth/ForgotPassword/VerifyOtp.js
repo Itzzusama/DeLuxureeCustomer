@@ -24,7 +24,7 @@ const VerifyOtp = () => {
   const { requestData, verify } = route.params || {};
   const navigation = useNavigation();
   const [value, setValue] = useState("");
-  const [token, setToken] = useState(route?.params?.token);
+  const [newToken, setNewToken] = useState(route?.params?.token);
   const [resendDisabled, setResendDisabled] = useState(true);
   const [resendTimer, setResendTimer] = useState(56);
   const resendCode = async () => {
@@ -40,7 +40,7 @@ const VerifyOtp = () => {
       if (res.data.message == "Verification code sent successfully") {
         console.log(res.data.verificationCode);
         ToastMessage(res.data.message);
-        setToken(res?.data?.token);
+        setNewToken(res?.data?.token);
       }
     } catch (err) {
       console.log(err);
@@ -55,14 +55,16 @@ const VerifyOtp = () => {
           email: requestData.email.trim().toLocaleLowerCase(),
           code: value,
         };
+        console.log(data);
         const res = await post("users/verify-otp/registration", data);
         if (res.data.success) {
+          ToastMessage(res.data.message);
           try {
             const response = await post("users/signup/customer", requestData);
             if (response.data.success) {
               await AsyncStorage.setItem("token", response.data?.token);
               dispatch(setUserType(response.data.user.type));
-              dispatch(setToken(res.data.token));
+              dispatch(setToken(response.data.token));
               navigation.reset({
                 index: 0,
                 routes: [
@@ -79,7 +81,7 @@ const VerifyOtp = () => {
           ToastMessage(res.data.message);
         }
       } catch (e) {
-        console.log("Verifying email failed", e);
+        console.log(e.response.data.message);
       } finally {
         setLoading(false);
       }
@@ -95,7 +97,7 @@ const VerifyOtp = () => {
           requestData
         );
         if (resp.data.success) {
-          navigation.navigate("NewPassword", { token: token });
+          navigation.navigate("NewPassword", { token: newToken });
         } else {
           ToastMessage(resp.data.message);
         }
