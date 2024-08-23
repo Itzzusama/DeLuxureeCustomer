@@ -89,7 +89,7 @@ const VerifyOtp = () => {
       setLoading(true);
       const requestData = {
         code: value,
-        token: token,
+        token: newToken,
       };
       try {
         const resp = await post(
