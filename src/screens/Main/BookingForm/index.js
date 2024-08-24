@@ -104,10 +104,10 @@ const BookingForm = () => {
       phone: formattedNumber,
       service: detail?._id,
       time: values?.bookTime,
-      category: detail?.cat?.type,
+      category: detail?.cat?._id,
     };
     const apiData = {
-      category: detail?.cat?.type,
+      category: detail?.cat?._id,
       day: moment().format("ddd"),
       date: values?.bookDate,
       time: values?.bookTime,
