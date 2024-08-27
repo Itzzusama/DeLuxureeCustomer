@@ -71,6 +71,7 @@ const Login = () => {
         email: args.email.trim().toLocaleLowerCase(),
         password: args.password,
         fcmtoken: fcmtoken,
+        user_type: "customer",
       };
       const res = await post("auth", reqData);
       if (res.data.token && res?.data?.user?.type == "customer") {

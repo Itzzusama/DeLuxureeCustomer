@@ -8,6 +8,7 @@ const checkEmail = async (email, setError) => {
   try {
     const ApiData = {
       email: email,
+      user_type: "customer",
     };
     const response = await post("users/check-email", ApiData);
     if (response.data.success) {
@@ -25,11 +26,13 @@ const checkEmail = async (email, setError) => {
     }
   } catch (error) {
     console.log("Error", error.response.data.message);
+    if (error?.response?.data?.message == "Email already existed") {
+      setError({
+        emailError: true,
+        show: true,
+      });
+    }
 
-    setError({
-      emailError: true,
-      show: true,
-    });
     return true;
   }
 };

@@ -98,7 +98,7 @@ const Signup = () => {
       };
 
       try {
-        const reqData = { email: values.email };
+        const reqData = { email: values.email, user_type: "customer" };
         const res = await post("users/send-code", reqData);
         if (res.data.message == "Verification code sent successfully") {
           console.log(res.data.verificationCode);

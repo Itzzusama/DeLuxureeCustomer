@@ -79,6 +79,7 @@ const ConfirmBooking = () => {
       }
     }
   };
+  console.log(detail);
   return (
     <Layout title={"Confirm and Pay"} isScroll>
       <View style={className("bor-1 border-grey1 rounded-2 p-2 px-3")}>
@@ -92,7 +93,7 @@ const ConfirmBooking = () => {
               fontFamily={fonts.bold}
             />
             <CustomText
-              label={`(${detail?.type})`}
+              label={`(${detail?.cat?.name})`}
               fontSize={14}
               color={colors.headLine}
               fontFamily={fonts.bold}

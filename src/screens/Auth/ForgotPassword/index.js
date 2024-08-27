@@ -27,6 +27,7 @@ const ForgotPassword = () => {
     try {
       const data = {
         email: values.email,
+        user_type: "customer",
       };
       const res = await post("users/forget-password", data);
       if (res.data.message == "Verification code sent successfully") {

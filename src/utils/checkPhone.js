@@ -24,11 +24,13 @@ const checkPhone = async (phoneInput, phone, setErrorPhone) => {
       return true;
     }
   } catch (error) {
-    console.log("Error", error);
-    setErrorPhone({
-      emailError: true,
-      show: true,
-    });
+    if (error?.response?.data?.message == "Phone already existed") {
+      setErrorPhone({
+        emailError: true,
+        show: true,
+      });
+    }
+
     return true;
   }
 };

@@ -59,6 +59,7 @@ const VerifyOtp = () => {
         const res = await post("users/verify-otp/registration", data);
         if (res.data.success) {
           ToastMessage(res.data.message);
+          console.log(requestData);
           try {
             const response = await post("users/signup/customer", requestData);
             if (response.data.success) {
@@ -75,7 +76,7 @@ const VerifyOtp = () => {
               });
             }
           } catch (err) {
-            console.log("err", err.message);
+            console.log("err--", err.response.data.message);
           }
         } else {
           ToastMessage(res.data.message);

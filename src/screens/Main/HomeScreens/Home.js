@@ -71,7 +71,7 @@ const Home = () => {
     try {
       const res = await post("service/filter", {
         type: "all",
-        last_id: filterData[filterData.length - 1]._id,
+        last_id: filterData[filterData.length - 1]?._id,
       });
 
       if (res.data.success) {

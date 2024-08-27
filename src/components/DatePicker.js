@@ -114,6 +114,7 @@ export const DatePicker = ({
           minimumDate={minDate ? minDate : null}
           maximumDate={maxDate ? maxDate : null}
           mode={mode}
+          display="spinner"
         />
       )}
     </>
