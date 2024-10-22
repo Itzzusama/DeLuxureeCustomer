@@ -61,7 +61,7 @@ const GetStarted = () => {
 
   return (
     <Layout
-      isSafeAreaView={true}
+      isSafeAreaView={false}
       showNavBar={false}
       translucent
       isScroll={false}

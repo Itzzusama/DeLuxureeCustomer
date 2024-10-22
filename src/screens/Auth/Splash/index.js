@@ -68,10 +68,10 @@ const Splash = () => {
 
   return (
     <Layout
-      isSafeAreaView={true}
+      isSafeAreaView={false}
       showNavBar={false}
       isScroll={false}
-      containerStyle={className("bg-mainBg")}
+      containerStyle={className("bg-white")}
     >
       <View style={className("bg-white align-center flex-1 justify-center")}>
         <Image

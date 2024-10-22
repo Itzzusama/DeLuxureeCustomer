@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Platform,
 } from "react-native";
 import Swiper from "react-native-swiper";
 import CustomText from "../../../components/CustomText";
@@ -22,6 +23,7 @@ import {
 import fonts from "../../../assets/fonts";
 import { ArrowBtn, Images } from "../../../assets/images";
 import CustomButton from "../../../components/CustomButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Intro = () => {
   //
@@ -56,9 +58,11 @@ const Intro = () => {
     haveSeen();
   }, []);
 
+  const insets=useSafeAreaInsets()
+
   return (
     <Layout
-      isSafeAreaView={true}
+      isSafeAreaView={false}
       showNavBar={false}
       translucent
       isScroll={false}
@@ -198,9 +202,9 @@ const Intro = () => {
           {dots}
         </View>
         <View
-          style={className(
+          style={[className(
             "align-center justify-center flex-row bg-mainBg pb-2 px-8"
-          )}
+          ),{paddingBottom:Platform.OS=='ios'?insets.bottom:10}]}
         >
           <CustomButton
             title={imageIndex == 2 ? "Get Started" : "Next"}

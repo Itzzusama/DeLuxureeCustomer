@@ -1,4 +1,6 @@
 #import "AppDelegate.h"
+#import <Firebase.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -6,6 +8,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyC7DYo4kTTxYLPzpSB3afRrIMA4HVMJI5I"]; // add this line using the api key obtained from Google Console
+  
+  [FIRApp configure];
+
   self.moduleName = @"DeeLuxureeClean";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

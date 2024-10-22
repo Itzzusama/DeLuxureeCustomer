@@ -4,8 +4,8 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { ActivityIndicator, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import { className } from "../global-styles";
@@ -17,29 +17,39 @@ import { setToken, userLogout } from "../store/reducer/usersSlice";
 import { catLogout } from "../store/reducer/categorySlice";
 import { servicesLogout } from "../store/reducer/servicesSlice";
 import { notiLogout } from "../store/reducer/unseenNotiSlice";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 GoogleSignin.configure({
   webClientId:
-    "157599591616-dmlv0dbsrcc8cl71910fa01jh50pj8do.apps.googleusercontent.com", // From Firebase Console
+    "40372426505-gad73g4168ia8h2qhsru726uc42bv9b2.apps.googleusercontent.com", // From Firebase Console
 });
 const LogoutSheet = ({ bottomSheetRef, type }) => {
   const navigation = useNavigation();
+  const insets=useSafeAreaInsets()
   const dispatch = useDispatch();
+  const [loading,setLoading]=useState(false)
   const handleLogout = async () => {
-    bottomSheetRef.current.close();
-    if (type == "del_account") {
-      const res = await del("users/");
-      if (res.data.success) {
-        ToastMessage("The account has been successfully deleted!");
+    setLoading(true)
+    try {
+      if (type == "del_account") {
+        const res = await del("users/");
+        if (res.data.success) {
+          ToastMessage("The account has been successfully deleted!");
+        }
       }
+      await AsyncStorage.removeItem("token");
+      await GoogleSignin.signOut();
+      dispatch(setToken(""));
+      dispatch(userLogout());
+      dispatch(catLogout());
+      dispatch(servicesLogout());
+      dispatch(notiLogout());
+    } catch (error) {}finally{
+      setLoading(false)
+      bottomSheetRef.current.close();
+      setTimeout(() => {
+        navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
+      }, 500);
     }
-    await AsyncStorage.removeItem("token");
-    await GoogleSignin.signOut();
-    dispatch(setToken(""));
-    dispatch(userLogout());
-    dispatch(catLogout());
-    dispatch(servicesLogout());
-    dispatch(notiLogout());
-    navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
   };
   return (
     <RBSheet
@@ -70,7 +80,7 @@ const LogoutSheet = ({ bottomSheetRef, type }) => {
             : "Are you sure you want to delete account?"}
         </Text>
       </View>
-      <View style={className("flex-row justify-between mb-5")}>
+      <View style={[className("flex-row justify-between mb-5"),{marginBottom:Platform.OS=='ios'?insets.bottom:20}]}>
         <TouchableOpacity
           onPress={() => bottomSheetRef.current?.close()}
           style={[styles.Btn, className("bg-white bor-1")]}
@@ -85,9 +95,13 @@ const LogoutSheet = ({ bottomSheetRef, type }) => {
           ]}
           onPress={handleLogout}
         >
+          {
+            loading ?
+            <ActivityIndicator/> :
           <Text style={className("text-white text-base")}>
             {type == "logout" ? "Logout" : "Delete"}
           </Text>
+          }
         </TouchableOpacity>
       </View>
     </RBSheet>
