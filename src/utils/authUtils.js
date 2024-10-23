@@ -32,7 +32,7 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
       email: email,
       fcmtoken: fcmtoken,
       user_type: "customer",
-      name:userCredential.user.displayName
+      name:userCredential.user?.displayName||""
     };
     try {
       const response = await post("auth/social-login", reqData);
@@ -55,8 +55,7 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
       }
     } catch (err) {
       await GoogleSignin.signOut();
-      console.log("r======>",err);
-      ToastMessage(err?.response?.data?.error || "Something went wrong");
+      ToastMessage("That email has already been registered with other account type.");
     }
   } catch (error) {
     await GoogleSignin.signOut();
@@ -111,7 +110,7 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
         ToastMessage("That email has already been registered with other account type.");
       }
     } catch (err) {
-      ToastMessage(err?.response?.data?.message || "Something went wrong");
+      ToastMessage("That email has already been registered with other account type.");
     }
   } catch (error) {
     ToastMessage("An error occurred during Apple sign in");
