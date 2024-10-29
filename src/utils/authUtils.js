@@ -55,7 +55,7 @@ export const signInWithGoogle = async (navigation, dispatch, setLoading) => {
       }
     } catch (err) {
       await GoogleSignin.signOut();
-      ToastMessage("That email has already been registered with other account type.");
+      ToastMessage(err?.response?.data?.message);
     }
   } catch (error) {
     await GoogleSignin.signOut();
@@ -83,6 +83,7 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
     } else {
       res = appleData;
     }
+    console.log(res)
 
     const fcmtoken = await AsyncStorage.getItem("fcmToken");
     const reqData = {
@@ -91,6 +92,7 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
       name: appleData?.fullName || "",
       user_type: "customer",
     };
+    console.log(reqData)
     try {
       const response = await post("auth/social-login", reqData);
       console.log(response.data.user.type);
@@ -110,7 +112,7 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
         ToastMessage("That email has already been registered with other account type.");
       }
     } catch (err) {
-      ToastMessage("That email has already been registered with other account type.");
+      ToastMessage(err?.response?.data?.message);
     }
   } catch (error) {
     ToastMessage("An error occurred during Apple sign in");

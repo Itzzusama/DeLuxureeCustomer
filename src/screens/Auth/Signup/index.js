@@ -39,14 +39,7 @@ const Signup = () => {
     password: Yup.string()
       .min(8, ({ min }) => `Password must be 8 characters `)
       .required("Password is required"),
-    phoneNumber: Yup.string()
-      .test("isValidNumber", "Enter a valid phone number", function (value) {
-        if (phoneInput.current) {
-          return phoneInput.current.isValidNumber(value);
-        }
-        return true;
-      })
-      .required("Phone number is required"),
+    phoneNumber: Yup.string().optional(),
   });
 
   const navigation = useNavigation();
@@ -74,18 +67,18 @@ const Signup = () => {
     requestUserPermission();
     NotificationListner();
   }, []);
-  console.log(phone);
+
   const regUser = async (values) => {
     setLoading(true);
     const fcmtoken = await AsyncStorage.getItem("fcmToken");
     const emailError = await checkEmail(values.email, setError);
-    const phoneError = await checkPhone(
-      phoneInput,
-      values.phoneNumber,
-      setErrorPhone
-    );
+    // const phoneError = await checkPhone(
+    //   phoneInput,
+    //   values.phoneNumber,
+    //   setErrorPhone
+    // );
 
-    if (!emailError && !phoneError) {
+    if (!emailError) {
       const {
         formattedNumber,
       } = phoneInput.current.getNumberAfterPossiblyEliminatingZero();

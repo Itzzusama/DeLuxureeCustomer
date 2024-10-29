@@ -544,7 +544,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeeLuxureeClean/DeeLuxureeClean.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = ZPSW58UHAY;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = DeeLuxureeClean/Info.plist;
@@ -576,7 +576,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeeLuxureeClean/DeeLuxureeClean.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = ZPSW58UHAY;
 				INFOPLIST_FILE = DeeLuxureeClean/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

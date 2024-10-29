@@ -64,5 +64,5 @@ const handleLogout = async () => {
   store.dispatch(setToken(""));
   store.dispatch(userLogout());
   GoogleSignin.signOut();
-  store.dispatch(setModal(true));
+  // store.dispatch(setModal(true));
 };
