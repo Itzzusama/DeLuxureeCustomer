@@ -73,7 +73,7 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
       requestedOperation: appleAuth.Operation.LOGIN,
       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
-    console.log(appleData.identityToken);
+
     if (!appleData.identityToken)
       return ToastMessage("An error occurred during Apple sign in");
 
@@ -115,7 +115,6 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
       ToastMessage(err?.response?.data?.message);
     }
   } catch (error) {
-    ToastMessage("An error occurred during Apple sign in");
   } finally {
     setLoading((prevState) => ({ ...prevState, apple: false }));
   }
