@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Layout from "../../../components/Layout";
 import { colors } from "../../../utils/colors";
@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import CustomText from "../../../components/CustomText";
 import LogoutSheet from "../../../components/LogoutSheet";
 import Icons from "../../../components/Icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const personalInfo = [
   { id: "Profile", icon: <Person />, name: "Profile" },
   { id: "PastBooking", icon: <History />, name: "Past Bookings" },
@@ -66,6 +67,15 @@ const renderOption = (item, navigation) => (
   </TouchableOpacity>
 );
 const Account = () => {
+  const [tokenExists, setTokenExists] = useState(false);
+  useEffect(() => {
+    // Check if token exists in AsyncStorage
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
   const [sheetType, setSheetType] = useState("logout");
   const navigation = useNavigation();
   const sheetRef = useRef(null);
@@ -73,6 +83,27 @@ const Account = () => {
     sheetRef.current.open();
     setSheetType(type);
   };
+  if (!tokenExists) {
+    return (
+      <Layout title={"Settings"}>
+        <View style={className("flex-1 align-center justify-center ")}>
+          <CustomText
+            label={"Please log in to access your account settings."}
+            fontSize={16}
+            color={colors.gray}
+            textAlign="center"
+          />
+          <CustomButton
+            title={"Login"}
+            customStyle={className("mt-8 w-70")}
+            onPress={() => {
+              navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
+            }}
+          />
+        </View>
+      </Layout>
+    );
+  }
   return (
     <Layout
       title={"Settings"}

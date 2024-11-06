@@ -37,10 +37,6 @@ const FilterSheet = ({ sheetRef, setFilterData }) => {
   };
 
   const applyFilter = async () => {
-    if (!value) {
-      ToastMessage("Please select a location");
-      return;
-    }
     setLoading(true);
     try {
       const body = {

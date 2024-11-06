@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Layout from "../../../components/Layout";
 import { colors } from "../../../utils/colors";
@@ -19,9 +19,21 @@ import Icons from "../../../components/Icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import CustomButton from "../../../components/CustomButton";
 import { useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ToastMessage } from "../../../utils/ToastMessage";
 
 const ProviderDetail = () => {
+  const [tokenExists, setTokenExists] = useState(false);
+  useEffect(() => {
+    // Check if token exists in AsyncStorage
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
   const navigation = useNavigation();
+
   const route = useRoute();
   const { detail } = route.params || {};
   const categories = useSelector((state) => state?.categories?.categories);
@@ -39,7 +51,13 @@ const ProviderDetail = () => {
         <CustomButton
           title={"Schedule Booking"}
           customStyle={className("mx-5 mb-4 w-90")}
-          onPress={() => navigation.navigate("BookingForm", { detail: detail })}
+          onPress={() => {
+            if (!tokenExists) {
+              ToastMessage("Please login to Schedule Booking");
+              return;
+            }
+            navigation.navigate("BookingForm", { detail: detail });
+          }}
         />
       }
     >

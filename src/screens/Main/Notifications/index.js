@@ -13,6 +13,9 @@ import { get } from "../../../services/ApiRequest";
 import { ToastMessage } from "../../../utils/ToastMessage";
 import moment from "moment";
 import Layout from "../../../components/Layout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { className } from "../../../global-styles";
+import CustomButton from "../../../components/CustomButton";
 
 const Notifications = () => {
   const array = [
@@ -57,6 +60,15 @@ const Notifications = () => {
   useEffect(() => {
     getNotifications();
   }, []);
+  const [tokenExists, setTokenExists] = useState(false);
+  useEffect(() => {
+    // Check if token exists in AsyncStorage
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
   const fetchMoreNotifications = async () => {
     if (notification?.length > 0) {
       const lastNoti = notification[notification?.length - 1]?._id;
@@ -71,6 +83,27 @@ const Notifications = () => {
       }
     }
   };
+  if (!tokenExists) {
+    return (
+      <Layout title={"Notification"}>
+        <View style={className("flex-1 align-center justify-center ")}>
+          <CustomText
+            label={"Please log in to access your chat."}
+            fontSize={16}
+            color={colors.gray}
+            textAlign="center"
+          />
+          <CustomButton
+            title={"Login"}
+            customStyle={className("mt-8 w-70")}
+            onPress={() => {
+              navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
+            }}
+          />
+        </View>
+      </Layout>
+    );
+  }
   return (
     <Layout title={"Notifications"}>
       <FlatList

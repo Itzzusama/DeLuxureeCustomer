@@ -114,7 +114,7 @@ const GetStarted = () => {
               )
             )}
             <TouchableOpacity
-              style={className("flex algin-center justify-center my-4")}
+              style={className("flex algin-center justify-center mt-4 mb-2")}
               onPress={() => navigation.navigate("Login")}
               activeOpacity={0.8}
             >
@@ -125,6 +125,32 @@ const GetStarted = () => {
               <CustomText
                 label={"Login"}
                 textStyle={className("text-14 text-white text-med")}
+              />
+            </TouchableOpacity>
+            <CustomText
+              label={"or"}
+              textStyle={className("text-11 text-white")}
+              alignSelf={"center"}
+            />
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                navigation.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: "MainStack",
+                    },
+                  ],
+                });
+              }}
+            >
+              <CustomText
+                label={"Continue as guest"}
+                textStyle={className("text-14 text-white")}
+                textDecorationLine={"underline"}
+                alignSelf={"center"}
+                lineHeight={20}
               />
             </TouchableOpacity>
           </View>

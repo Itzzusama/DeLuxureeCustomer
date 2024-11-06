@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useRef } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 import PendingOrders from "./PendingOrders";
@@ -13,10 +13,46 @@ import Layout from "../../../components/Layout";
 import { colors } from "../../../utils/colors";
 import Icons from "../../../components/Icons";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomText from "../../../components/CustomText";
+import CustomButton from "../../../components/CustomButton";
+import { className } from "../../../global-styles";
 
 const Tab = createMaterialTopTabNavigator();
 
 const Orders = () => {
+  const navigation = useNavigation();
+  const [tokenExists, setTokenExists] = useState(false);
+  useEffect(() => {
+    // Check if token exists in AsyncStorage
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
+  if (!tokenExists) {
+    return (
+      <Layout title={"Bookings"}>
+        <View style={className("flex-1 align-center justify-center ")}>
+          <CustomText
+            label={"Please log in to access your bookings"}
+            fontSize={16}
+            color={colors.gray}
+            textAlign="center"
+          />
+          <CustomButton
+            title={"Login"}
+            customStyle={className("mt-8 w-70")}
+            onPress={() => {
+              navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
+            }}
+          />
+        </View>
+      </Layout>
+    );
+  }
   return (
     <Layout title={"Bookings"} layoutContainer={{ paddingHorizontal: 0 }}>
       <Tab.Navigator

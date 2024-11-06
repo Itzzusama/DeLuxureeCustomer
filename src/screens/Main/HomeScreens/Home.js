@@ -18,6 +18,7 @@ import { get, post } from "../../../services/ApiRequest";
 import NoDataFound from "../../../components/NoDataFound";
 import { fetchServices } from "../../../store/reducer/servicesSlice";
 import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,15 @@ const Home = () => {
   const userData = useSelector((state) => state?.user?.loginUser);
   const [filterData, setFilterData] = useState(services);
   const loading = useSelector((state) => state?.services?.loading);
-
+  const [tokenExists, setTokenExists] = useState(false);
+  useEffect(() => {
+    // Check if token exists in AsyncStorage
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
   useEffect(() => {
     filterServices(selectedCategory);
   }, [services, selectedCategory]);
@@ -88,7 +97,7 @@ const Home = () => {
     <Layout
       isHome
       showNoti
-      customHeader={<CustomHeader title={`Hi, ${userData?.name} 🖐`} />}
+      customHeader={<CustomHeader title={`Hi, ${userData?.name || ""} 🖐`} />}
       isScroll
       layoutContainer={{ paddingHorizontal: 0 }}
     >
@@ -148,7 +157,9 @@ const Home = () => {
             />
           }
           keyExtractor={(_, index) => index.toString()}
-          renderItem={({ item }) => <ServiceCard item={item} showHeart />}
+          renderItem={({ item }) => (
+            <ServiceCard item={item} showHeart tokenExists={tokenExists} />
+          )}
           ListEmptyComponent={
             <NoDataFound
               source={Images.noShow}

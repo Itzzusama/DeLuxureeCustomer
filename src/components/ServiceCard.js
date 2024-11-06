@@ -30,6 +30,7 @@ const ServiceCard = ({
   fetchOrders,
   order,
   showHeart = false,
+  tokenExists,
 }) => {
   const navigation = useNavigation();
   const color =
@@ -106,7 +107,7 @@ const ServiceCard = ({
               color={colors.blk2}
               numberOfLines={1}
             />
-            {showHeart && (
+            {showHeart && tokenExists && (
               <TouchableOpacity
                 onPress={() => {
                   handleSaved();

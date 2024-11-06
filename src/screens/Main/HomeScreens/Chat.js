@@ -1,5 +1,15 @@
-import { FlatList, RefreshControl, View } from "react-native";
-import React, { useLayoutEffect, useState, useCallback } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  View,
+} from "react-native";
+import React, {
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 
 import Layout from "../../../components/Layout";
 import { colors } from "../../../utils/colors";
@@ -11,12 +21,24 @@ import { useNavigation } from "@react-navigation/native";
 import { get } from "../../../services/ApiRequest";
 import NoDataFound from "../../../components/NoDataFound";
 import { Images } from "../../../assets/images";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomButton from "../../../components/CustomButton";
+import CustomText from "../../../components/CustomText";
 
 const Chat = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [conversation, setConversation] = useState([]);
   const [filterData, setFilterData] = useState([]);
+  const [tokenExists, setTokenExists] = useState(false);
+  const [loadingToken, setLoadingToken] = useState(true);
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setTokenExists(!!token);
+    };
+    checkToken();
+  }, []);
   const fetchConversations = async () => {
     try {
       const res = await get("msg/conversations");
@@ -77,6 +99,28 @@ const Chat = () => {
       setFilterData(filterJob);
     }
   };
+
+  if (!tokenExists) {
+    return (
+      <Layout title={"Chat"}>
+        <View style={className("flex-1 align-center justify-center ")}>
+          <CustomText
+            label={"Please log in to access your chat."}
+            fontSize={16}
+            color={colors.gray}
+            textAlign="center"
+          />
+          <CustomButton
+            title={"Login"}
+            customStyle={className("mt-8 w-70")}
+            onPress={() => {
+              navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
+            }}
+          />
+        </View>
+      </Layout>
+    );
+  }
   return (
     <Layout
       title={"Chat"}

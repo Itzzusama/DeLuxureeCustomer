@@ -23,7 +23,7 @@ const App = () => {
   return (
 
     <StripeProvider
-      publishableKey="pk_test_51MheApLjXdkkwBdXGrVWbtUWP6iPoO1v3WZ75V14b9pWCHNk4oB2OkqGn6arX4zrVukrRsgd37eswlqLrQIy7Ku100FWia7mHe"
+      publishableKey="pk_live_51MheApLjXdkkwBdXbrAKxjnsSIl9FStlDbVoG1j43lsFzIshb95EbmhVYzQuH7hxCudUMTOe3Ck11FrXiba5TUtV00lOCCCqPx"
       urlScheme="your-url-scheme">
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

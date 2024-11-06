@@ -58,7 +58,7 @@ const Intro = () => {
     haveSeen();
   }, []);
 
-  const insets=useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
   return (
     <Layout
@@ -202,9 +202,12 @@ const Intro = () => {
           {dots}
         </View>
         <View
-          style={[className(
-            "align-center justify-center flex-row bg-mainBg pb-2 px-8"
-          ),{paddingBottom:Platform.OS=='ios'?insets.bottom:10}]}
+          style={[
+            className(
+              "align-center justify-center flex-row bg-mainBg pb-2 px-8"
+            ),
+            { paddingBottom: Platform.OS == "ios" ? insets.bottom : 10 },
+          ]}
         >
           <CustomButton
             title={imageIndex == 2 ? "Get Started" : "Next"}
