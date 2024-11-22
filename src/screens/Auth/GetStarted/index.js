@@ -147,7 +147,7 @@ const GetStarted = () => {
             >
               <CustomText
                 label={"Continue as guest"}
-                textStyle={className("text-14 text-white")}
+                textStyle={className("text-18 text-white mb-6")}
                 textDecorationLine={"underline"}
                 alignSelf={"center"}
                 lineHeight={20}

@@ -83,19 +83,15 @@ export const signInWithApple = async (navigation, dispatch, setLoading) => {
     } else {
       res = appleData;
     }
-    console.log(res)
-
     const fcmtoken = await AsyncStorage.getItem("fcmToken");
     const reqData = {
       email: res.email,
       fcmtoken: fcmtoken,
-      name: appleData?.fullName || "",
+      name: appleData?.fullName?.familyName || "",
       user_type: "customer",
     };
-    console.log(reqData)
     try {
       const response = await post("auth/social-login", reqData);
-      console.log(response.data.user.type);
       if (response.data?.token && response?.data?.user?.type == "customer") {
         await AsyncStorage.setItem("token", response.data?.token);
         dispatch(setUserType(response.data.user.type));
