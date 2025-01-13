@@ -20,6 +20,7 @@ import CustomText from "../../../components/CustomText";
 import LogoutSheet from "../../../components/LogoutSheet";
 import Icons from "../../../components/Icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
 const personalInfo = [
   { id: "Profile", icon: <Person />, name: "Profile" },
   { id: "PastBooking", icon: <History />, name: "Past Bookings" },
@@ -67,15 +68,7 @@ const renderOption = (item, navigation) => (
   </TouchableOpacity>
 );
 const Account = () => {
-  const [tokenExists, setTokenExists] = useState(false);
-  useEffect(() => {
-    // Check if token exists in AsyncStorage
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setTokenExists(!!token);
-    };
-    checkToken();
-  }, []);
+  const token = useSelector((state) => state?.user?.token);
   const [sheetType, setSheetType] = useState("logout");
   const navigation = useNavigation();
   const sheetRef = useRef(null);
@@ -83,7 +76,7 @@ const Account = () => {
     sheetRef.current.open();
     setSheetType(type);
   };
-  if (!tokenExists) {
+  if (!token) {
     return (
       <Layout title={"Settings"}>
         <View style={className("flex-1 align-center justify-center ")}>

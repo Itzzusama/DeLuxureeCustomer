@@ -103,7 +103,7 @@ const GooglePlaces = ({
         label={withLabel}
         marginBottom={8}
         fontFamily={fonts.semiBold}
-        fontSize={18}
+        fontSize={14}
         marginTop={marginTop}
       />
       <TouchableOpacity

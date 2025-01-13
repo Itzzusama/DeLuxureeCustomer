@@ -30,7 +30,6 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
-
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
@@ -39,7 +38,20 @@ const Signup = () => {
     password: Yup.string()
       .min(8, ({ min }) => `Password must be 8 characters `)
       .required("Password is required"),
-    phoneNumber: Yup.string().optional(),
+
+    phoneNumber: Yup.string().test(
+      "isValidNumber",
+      "Enter a valid phone number",
+      function (value) {
+        if (value) {
+          if (phoneInput.current) {
+            return phoneInput.current.isValidNumber(value);
+          }
+          return false;
+        }
+        return true; // Skip validation if no input
+      }
+    ),
   });
 
   const navigation = useNavigation();
@@ -72,11 +84,11 @@ const Signup = () => {
     setLoading(true);
     const fcmtoken = await AsyncStorage.getItem("fcmToken");
     const emailError = await checkEmail(values.email, setError);
-    // const phoneError = await checkPhone(
-    //   phoneInput,
-    //   values.phoneNumber,
-    //   setErrorPhone
-    // );
+    const phoneError = await checkPhone(
+      phoneInput,
+      values.phoneNumber,
+      setErrorPhone
+    );
 
     if (!emailError) {
       const {
@@ -210,7 +222,9 @@ const Signup = () => {
                 setPhone(text);
               }}
               error={
-                (touched.phoneNumber && errors.phoneNumber) ||
+                (touched.phoneNumber &&
+                  errors.phoneNumber &&
+                  !!values.phoneNumber) ||
                 !errorPhone.emailError
               }
             />
@@ -226,7 +240,7 @@ const Signup = () => {
               title={"Sign Up"}
               onPress={handleSubmit}
               loading={loading}
-              disabled={loading}
+              disabled={loading || errorPhone?.emailError}
             />
           </>
         )}

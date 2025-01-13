@@ -17,11 +17,14 @@ import GooglePlaces from "../../../components/GooglePlaces";
 import { post } from "../../../services/ApiRequest";
 import { ToastMessage } from "../../../utils/ToastMessage";
 import moment from "moment";
+import { parsePhoneNumber } from "libphonenumber-js";
+import { useSelector } from "react-redux";
 
 // Validation Schema
 
 const BookingForm = () => {
   const route = useRoute();
+  const userData = useSelector((state) => state?.user?.loginUser);
   const { detail } = route.params;
   const phoneInput = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -34,29 +37,32 @@ const BookingForm = () => {
     modal: false,
     time: "",
   });
+
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
     bookDate: Yup.date().required("Booking Date is required"),
     bookTime: Yup.date().required("Booking Time is required"),
     location: Yup.string().required("Location is required"),
-    phoneNumber: Yup.string()
-      .test("isValidNumber", "Enter a valid phone number", function (value) {
-        if (phoneInput.current) {
-          return phoneInput.current.isValidNumber(value);
+    phoneNumber: Yup.string().test(
+      "isValidNumber",
+      "Enter a valid phone number",
+      function (value) {
+        if (userData?.phone?.length <= 2) {
+          if (phoneInput.current) {
+            return phoneInput.current.isValidNumber(value);
+          }
+          return false;
         }
         return true;
-      })
-      .required("Phone number is required"),
+      }
+    ),
   });
+
   const onDateChange = (event, selectedDate, setFieldValue) => {
     if (event.type === "dismissed") {
       setDateData({ ...dateData, modal: false });
     } else {
       const dateObj = new Date(selectedDate);
-      const date = String(dateObj.getDate()).padStart(2, "0");
-      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-      const year = dateObj.getFullYear();
-      const formattedDate = `${year}-${month}-${date}`;
+      const formattedDate = moment(dateObj).format("YYYY-MM-DD");
       setDateData({ date: formattedDate, modal: false });
       setFieldValue("bookDate", selectedDate);
     }
@@ -67,30 +73,33 @@ const BookingForm = () => {
       setTimeData({ ...timeData, modal: false });
     } else {
       const timeObj = new Date(selectedTime);
-      const hours = String(timeObj.getHours()).padStart(2, "0");
-      const minutes = String(timeObj.getMinutes()).padStart(2, "0");
-      const formattedTime = `${hours}:${minutes}`;
-      setTimeData({ time: formattedTime, modal: false });
+      const formattedTime = moment(timeObj).format("HH:mm:ss");
+
+      setTimeData({
+        time: formattedTime,
+        modal: false,
+      });
       setFieldValue("bookTime", selectedTime);
     }
   };
 
   const [initialValues, setInitialValues] = useState({
-    name: "",
     description: "",
     bookDate: "",
     bookTime: "",
-    phoneNumber: "",
+    phoneNumber: userData?.phone?.length > 2 ? userData?.phone : "",
     location: "",
     latLng: {
       latitude: 0,
       longitude: 0,
     },
   });
+
   const handlePress = async (values) => {
-    const {
-      formattedNumber,
-    } = phoneInput.current.getNumberAfterPossiblyEliminatingZero();
+    const formattedNumber =
+      userData?.phone?.length > 2
+        ? userData.phone
+        : phoneInput.current.getNumberAfterPossiblyEliminatingZero();
     const data = {
       note: values.description,
       amount: detail?.price,
@@ -100,12 +109,13 @@ const BookingForm = () => {
         lat: values.latLng.latitude,
         lng: values.latLng.longitude,
       },
-      name: values.name,
+      name: userData?.name,
       phone: formattedNumber,
       service: detail?._id,
       time: values?.bookTime,
       category: detail?.cat?._id,
     };
+
     const apiData = {
       category: detail?.cat?._id,
       day: moment().format("ddd"),
@@ -160,26 +170,23 @@ const BookingForm = () => {
           touched,
         }) => (
           <>
-            <CustomInput
-              withLabel={"Full Name"}
-              marginTop={5}
-              onChangeText={handleChange("name")}
-              onBlur={handleBlur("name")}
-              value={values.name}
-              error={touched.name && errors.name}
-              placeholder={"Name"}
-            />
-            <Error error={errors.name} visible={touched.name} />
-            <PhoneNumberInput
-              phoneInput={phoneInput}
-              value={values.phoneNumber}
-              defaultValue={values.phoneNumber}
-              onChangeText={(text) => {
-                handleChange("phoneNumber")(text);
-              }}
-              error={touched.phoneNumber && errors.phoneNumber}
-            />
-            <Error error={errors.phoneNumber} visible={touched.phoneNumber} />
+            {userData?.phone?.length <= 2 ? (
+              <>
+                <PhoneNumberInput
+                  phoneInput={phoneInput}
+                  value={values.phoneNumber}
+                  defaultValue={values.phoneNumber}
+                  onChangeText={(text) => {
+                    handleChange("phoneNumber")(text);
+                  }}
+                  error={touched.phoneNumber && errors.phoneNumber}
+                />
+                <Error
+                  error={errors.phoneNumber}
+                  visible={touched.phoneNumber}
+                />
+              </>
+            ) : null}
             <CustomText
               label={"Booking Date"}
               marginBottom={8}
@@ -190,6 +197,7 @@ const BookingForm = () => {
             <DatePicker
               date={dateData.date}
               show={dateData.modal}
+              placeHolder={"Booking Date"}
               showDatepicker={() =>
                 setDateData({
                   ...dateData,
@@ -204,7 +212,7 @@ const BookingForm = () => {
             />
             <Error error={errors.bookDate} visible={touched.bookDate} />
             <CustomText
-              label={"Booking Time"}
+              label={"Booking time"}
               marginBottom={8}
               fontSize={14}
               fontFamily={fonts.semiBold}
@@ -213,6 +221,7 @@ const BookingForm = () => {
             <DatePicker
               date={timeData.time}
               show={timeData.modal}
+              placeHolder={"Booking time"}
               showDatepicker={() =>
                 setTimeData({
                   ...timeData,
@@ -222,7 +231,7 @@ const BookingForm = () => {
               onChange={(event, selectedTime) =>
                 onTimeChange(event, selectedTime, setFieldValue)
               }
-              mode="time" // Pass mode prop to DatePicker
+              mode="time"
               error={touched.bookTime && errors.bookTime}
             />
             <Error error={errors.bookTime} visible={touched.bookTime} />
@@ -236,15 +245,14 @@ const BookingForm = () => {
               placeholder={"Location"}
               setLatLong={(latLong) => {
                 setFieldValue("latLng", latLong);
-                console.log(latLong);
               }}
               error={touched.location && errors.location}
             />
             <Error error={errors.location} visible={touched.location} />
             <CustomInput
-              withLabel={"Note for Worker"}
+              withLabel={"Notes"}
               marginTop={5}
-              placeholder={"Note"}
+              placeholder={"Notes"}
               containerStyle={className("h-30")}
               textAlignVertical={"top"}
               multiline
@@ -254,7 +262,6 @@ const BookingForm = () => {
               error={touched.description && errors.description}
             />
             <Error error={errors.description} visible={touched.description} />
-
             <CustomButton
               title={"Continue"}
               customStyle={className("my-8")}

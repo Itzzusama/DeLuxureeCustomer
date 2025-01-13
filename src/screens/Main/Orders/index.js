@@ -22,17 +22,10 @@ import { className } from "../../../global-styles";
 const Tab = createMaterialTopTabNavigator();
 
 const Orders = () => {
+  const token = useSelector((state) => state?.user?.token);
   const navigation = useNavigation();
-  const [tokenExists, setTokenExists] = useState(false);
-  useEffect(() => {
-    // Check if token exists in AsyncStorage
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setTokenExists(!!token);
-    };
-    checkToken();
-  }, []);
-  if (!tokenExists) {
+
+  if (!token) {
     return (
       <Layout title={"Bookings"}>
         <View style={className("flex-1 align-center justify-center ")}>

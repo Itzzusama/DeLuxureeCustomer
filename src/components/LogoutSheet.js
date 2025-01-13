@@ -5,7 +5,14 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import React, { useState } from "react";
-import { ActivityIndicator, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import { className } from "../global-styles";
@@ -24,11 +31,11 @@ GoogleSignin.configure({
 });
 const LogoutSheet = ({ bottomSheetRef, type }) => {
   const navigation = useNavigation();
-  const insets=useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const handleLogout = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       if (type == "del_account") {
         const res = await del("users/");
@@ -43,9 +50,11 @@ const LogoutSheet = ({ bottomSheetRef, type }) => {
       dispatch(catLogout());
       dispatch(servicesLogout());
       dispatch(notiLogout());
-    } catch (error) {}finally{
-      setLoading(false)
-      bottomSheetRef.current.close();
+    } catch (error) {
+      console.log("err");
+    } finally {
+      setLoading(false);
+      bottomSheetRef?.current?.close();
       setTimeout(() => {
         navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] });
       }, 500);
@@ -80,7 +89,12 @@ const LogoutSheet = ({ bottomSheetRef, type }) => {
             : "Are you sure you want to delete account?"}
         </Text>
       </View>
-      <View style={[className("flex-row justify-between mb-5"),{marginBottom:Platform.OS=='ios'?insets.bottom:20}]}>
+      <View
+        style={[
+          className("flex-row justify-between mb-5"),
+          { marginBottom: Platform.OS == "ios" ? insets.bottom : 20 },
+        ]}
+      >
         <TouchableOpacity
           onPress={() => bottomSheetRef.current?.close()}
           style={[styles.Btn, className("bg-white bor-1")]}
@@ -95,13 +109,13 @@ const LogoutSheet = ({ bottomSheetRef, type }) => {
           ]}
           onPress={handleLogout}
         >
-          {
-            loading ?
-            <ActivityIndicator/> :
-          <Text style={className("text-white text-base")}>
-            {type == "logout" ? "Logout" : "Delete"}
-          </Text>
-          }
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <Text style={className("text-white text-base")}>
+              {type == "logout" ? "Logout" : "Delete"}
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
     </RBSheet>

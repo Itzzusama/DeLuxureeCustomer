@@ -7,62 +7,6 @@ import Icons from "./Icons";
 import fonts from "../assets/fonts";
 import { ToastMessage } from "../utils/ToastMessage";
 
-// export const DatePicker = ({
-//   date,
-//   placeHolder,
-//   show,
-//   showDatepicker,
-//   onChange,
-//   maxDate,
-//   minDate,
-//   disable,
-//   customeStyle,
-//   error,
-//   mode = "date", // Added mode prop
-// }) => {
-//   const isError =
-//     error !== undefined && error !== null && error !== true && error !== "";
-
-//   return (
-//     <>
-//       <TouchableOpacity
-//         onPress={showDatepicker}
-//         style={[
-//           styles.box,
-//           {
-//             borderColor: isError ? colors.red : colors.lightGrey,
-//             marginBottom: isError ? 2 : 15,
-//           },
-//           customeStyle,
-//         ]}
-//         disabled={disable}
-//       >
-//         <CustomText
-//           label={date || placeHolder}
-//           fontFamily={fonts.medium}
-//           fontSize={16}
-//         />
-//         <Icons
-//           name={mode == "date" ? "calendar" : "time-outline"}
-//           family={mode == "date" ? "EvilIcons" : "Ionicons"}
-//           size={mode == "date" ? 25 : 20}
-//           color={colors.grey}
-//         />
-//       </TouchableOpacity>
-//       {show && (
-//         <DateTimePicker
-//           testID="dateTimePicker"
-//           value={new Date()}
-//           is24Hour={true}
-//           onChange={onChange}
-//           minimumDate={minDate ? minDate : null}
-//           maximumDate={maxDate ? maxDate : null}
-//           mode={mode} // Use the mode prop
-//         />
-//       )}
-//     </>
-//   );
-// };
 export const DatePicker = ({
   date,
   placeHolder,
@@ -95,8 +39,9 @@ export const DatePicker = ({
       >
         <CustomText
           label={date || placeHolder}
-          fontFamily={fonts.medium}
-          fontSize={16}
+          fontFamily={date ? fonts.medium : fonts.regular}
+          color={date ? colors.black : colors.placeHolder}
+          fontSize={14}
         />
         <Icons
           name={mode == "date" ? "calendar" : "time-outline"}
@@ -109,7 +54,6 @@ export const DatePicker = ({
         <DateTimePicker
           testID="dateTimePicker"
           value={new Date()}
-          is24Hour={true}
           onChange={onChange}
           minimumDate={minDate ? minDate : null}
           maximumDate={maxDate ? maxDate : null}

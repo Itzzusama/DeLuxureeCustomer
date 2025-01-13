@@ -55,8 +55,8 @@ const Search = () => {
   const fitAllMarkers = () => {
     if (service?.length > 0 && mapRef.current) {
       const coordinates = filterData.map((service) => ({
-        latitude: service.location.coordinates[1],
-        longitude: service.location.coordinates[0],
+        latitude: service?.location?.coordinates[1],
+        longitude: service?.location?.coordinates[0],
       }));
       mapRef.current.fitToCoordinates(coordinates, {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
@@ -81,6 +81,7 @@ const Search = () => {
       console.log(err);
     }
   };
+  console.log(filterData);
   return (
     <Layout
       isSafeAreaView={true}
@@ -108,23 +109,25 @@ const Search = () => {
             longitudeDelta: 0.0421,
           }}
         >
-          {filterData?.map((service, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: service.location.coordinates[1],
-                longitude: service.location.coordinates[0],
-              }}
-            >
-              <View style={styles.imageCircle}>
-                <Image
-                  resizeMode="contain"
-                  source={Images.flagIcon}
-                  style={styles.flag}
-                />
-              </View>
-            </Marker>
-          ))}
+          {filterData?.map((service, index) => {
+            return (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: service?.location?.coordinates[1] || 0,
+                  longitude: service?.location?.coordinates[0] || 0,
+                }}
+              >
+                <View style={styles.imageCircle}>
+                  <Image
+                    resizeMode="contain"
+                    source={Images.flagIcon}
+                    style={styles.flag}
+                  />
+                </View>
+              </Marker>
+            );
+          })}
         </MapView>
         <View style={[className("my-3 mx-4")]}>
           <SearchBar

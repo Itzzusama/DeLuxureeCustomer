@@ -54,6 +54,7 @@ const PhoneNumberInput = ({
         disabled={disabled}
         placeholder={"Enter your number"}
         textInputProps={{
+          placeholderTextColor: "#5E5E5E",
           onFocus: handleFocus,
           onBlur: handleBlur,
         }}
@@ -119,10 +120,10 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 10,
     color: colors.black,
-    fontSize: 16,
+    fontSize: 14,
   },
   codeTextStyle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: fonts.medium,
     color: colors.black,
   },

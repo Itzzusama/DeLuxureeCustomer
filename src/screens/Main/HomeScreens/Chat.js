@@ -24,21 +24,15 @@ import { Images } from "../../../assets/images";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CustomButton from "../../../components/CustomButton";
 import CustomText from "../../../components/CustomText";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [conversation, setConversation] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [tokenExists, setTokenExists] = useState(false);
   const [loadingToken, setLoadingToken] = useState(true);
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setTokenExists(!!token);
-    };
-    checkToken();
-  }, []);
+  const token = useSelector((state) => state?.user?.token);
   const fetchConversations = async () => {
     try {
       const res = await get("msg/conversations");
@@ -100,7 +94,7 @@ const Chat = () => {
     }
   };
 
-  if (!tokenExists) {
+  if (!token) {
     return (
       <Layout title={"Chat"}>
         <View style={className("flex-1 align-center justify-center ")}>
