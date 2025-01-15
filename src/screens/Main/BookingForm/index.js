@@ -57,21 +57,17 @@ const BookingForm = () => {
     ),
   });
 
-  const onDateChange = (event, selectedDate, setFieldValue) => {
-    if (event.type === "dismissed") {
-      setDateData({ ...dateData, modal: false });
-    } else {
+  const onDateChange = (selectedDate, setFieldValue) => {
       const dateObj = new Date(selectedDate);
       const formattedDate = moment(dateObj).format("YYYY-MM-DD");
       setDateData({ date: formattedDate, modal: false });
       setFieldValue("bookDate", selectedDate);
-    }
   };
 
-  const onTimeChange = (event, selectedTime, setFieldValue) => {
-    if (event.type === "dismissed") {
-      setTimeData({ ...timeData, modal: false });
-    } else {
+  const onTimeChange = (selectedTime, setFieldValue) => {
+    // if (event.type === "dismissed") {
+    //   setTimeData({ ...timeData, modal: false });
+    // } else {
       const timeObj = new Date(selectedTime);
       const formattedTime = moment(timeObj).format("HH:mm:ss");
 
@@ -80,7 +76,7 @@ const BookingForm = () => {
         modal: false,
       });
       setFieldValue("bookTime", selectedTime);
-    }
+    // }
   };
 
   const [initialValues, setInitialValues] = useState({
@@ -204,8 +200,14 @@ const BookingForm = () => {
                   modal: true,
                 })
               }
-              onChange={(event, selectedDate) =>
-                onDateChange(event, selectedDate, setFieldValue)
+              hideDatepicker={() =>
+                setDateData({
+                  ...dateData,
+                  modal: false,
+                })
+              }
+              onChange={(selectedDate) =>
+                onDateChange(selectedDate, setFieldValue)
               }
               minDate={new Date()}
               error={touched.bookDate && errors.bookDate}
@@ -228,8 +230,14 @@ const BookingForm = () => {
                   modal: true,
                 })
               }
-              onChange={(event, selectedTime) =>
-                onTimeChange(event, selectedTime, setFieldValue)
+              hideDatepicker={() =>
+                setTimeData({
+                  ...timeData,
+                  modal: false,
+                })
+              }
+              onChange={(selectedTime) =>
+                onTimeChange(selectedTime, setFieldValue)
               }
               mode="time"
               error={touched.bookTime && errors.bookTime}

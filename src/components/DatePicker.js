@@ -1,11 +1,14 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { colors } from "../utils/colors";
 import CustomText from "./CustomText";
 import Icons from "./Icons";
 import fonts from "../assets/fonts";
 import { ToastMessage } from "../utils/ToastMessage";
+import Modal from 'react-native-modal';
+import CustomButton from "./CustomButton";
+import { className } from "../global-styles";
 
 export const DatePicker = ({
   date,
@@ -19,9 +22,12 @@ export const DatePicker = ({
   customeStyle,
   error,
   mode = "date",
+  hideDatepicker
 }) => {
   const isError =
     error !== undefined && error !== null && error !== true && error !== "";
+
+  const [dateData,setDateData]=useState(new Date())
 
   return (
     <>
@@ -50,17 +56,34 @@ export const DatePicker = ({
           color={colors.grey}
         />
       </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={new Date()}
-          onChange={onChange}
-          minimumDate={minDate ? minDate : null}
-          maximumDate={maxDate ? maxDate : null}
-          mode={mode}
-          display="spinner"
-        />
-      )}
+         <Modal
+         isVisible={show}
+         animationIn="fadeIn"
+         animationOut="fadeOut">
+          <View style={{backgroundColor:"white",borderRadius:20}}>
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={dateData}
+              onChange={(event, selectedTime)=>setDateData(selectedTime)}
+              minimumDate={minDate ? minDate : null}
+              maximumDate={maxDate ? maxDate : null}
+              mode={mode}
+              display="spinner"
+            />
+            <View style={className("flex align-center justify-evenly my-2")}>
+                <CustomButton
+                 title={"Cancel"}
+                 customStyle={className("w-30 bg-grey")}
+                 onPress={hideDatepicker}
+                 />
+                <CustomButton
+                 title={"Ok"}
+                 customStyle={className("w-30")}
+                 onPress={()=>onChange(dateData)}
+                 />
+            </View>
+          </View>
+        </Modal>
     </>
   );
 };
