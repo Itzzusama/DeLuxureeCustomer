@@ -1,7 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import { useNavigation } from "@react-navigation/native";
 import React, { useState, useRef, useEffect } from "react";
-import { TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -11,7 +17,7 @@ import Layout from "../../../components/Layout";
 import { className } from "../../../global-styles";
 import fonts from "../../../assets/fonts";
 import CustomText from "../../../components/CustomText";
-import { AppleIcon, GoogleIcon } from "../../../assets/images";
+import { AppleIcon, GoogleIcon, Images } from "../../../assets/images";
 import PhoneNumberInput from "../../../components/PhoneNumberInput";
 import Error from "../../../components/Error";
 import checkEmail from "../../../utils/checkEmail";
@@ -24,14 +30,18 @@ import {
 import { post } from "../../../services/ApiRequest";
 import { colors } from "../../../utils/colors";
 import { ToastMessage } from "../../../utils/ToastMessage";
+import axios from "axios";
+import { endPoints } from "../../../services/ENV";
+import UploadImage from "../../../components/UploadImage";
 
 const Signup = () => {
   const phoneInput = useRef(null);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [image, setImage] = useState("");
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
     email: Yup.string()
       .required("Email is required")
       .email("Email format is not valid"),
@@ -100,6 +110,7 @@ const Signup = () => {
         password: values.password,
         fcmtoken: fcmtoken,
         name: values.name,
+        profilePicture: image,
       };
 
       try {
@@ -121,7 +132,35 @@ const Signup = () => {
       }
     }
   };
+  const uploadAndGetUrl = async (file) => {
+    setImageLoading(true);
 
+    try {
+      const formData = new FormData();
+      formData.append("image", {
+        uri: file?.path || file?.fileCopyUri || "",
+        type: "image/jpeg",
+        name: "photo.jpg",
+      });
+      const res = await axios.post(
+        `${endPoints.BASE_URL}image/upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            // "x-auth-token": token,
+          },
+        }
+      );
+      setImage(res?.data?.image);
+      return res?.data?.image;
+    } catch (err) {
+      console.log(err);
+      ToastMessage("Upload Again");
+    } finally {
+      setImageLoading(false);
+    }
+  };
   return (
     <Layout
       footerComponent={
@@ -155,6 +194,36 @@ const Signup = () => {
         marginBottom={15}
         fontSize={16}
       />
+
+      {imageLoading ? (
+        <ActivityIndicator size={"small"} />
+      ) : (
+        <UploadImage
+          handleChange={async (res) => {
+            const url = await uploadAndGetUrl(res);
+            // setImage(url);
+          }}
+          renderButton={(res) => (
+            <View style={className("align-center justify-center")}>
+              <Pressable
+                onPress={res}
+                style={className("align-center justify-center mb-4 ")}
+              >
+                <Image
+                  source={image ? { uri: image } : Images.user}
+                  style={{ height: 90, width: 90, borderRadius: 50 }}
+                />
+                <CustomText
+                  label={"Choose Profile Picture"}
+                  fontSize={14}
+                  fontFamily={fonts.semiBold}
+                  marginTop={10}
+                />
+              </Pressable>
+            </View>
+          )}
+        />
+      )}
 
       <Formik
         initialValues={{

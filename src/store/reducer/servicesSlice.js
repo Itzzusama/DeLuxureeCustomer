@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { get, post } from "../../services/ApiRequest";
 
 const initialState = {
-  loading: false,
+  loading: true,
   services: [],
 };
 // First, define the reducer and action creators via `createSlice`
@@ -39,7 +39,6 @@ export const {
 
 // Define a thunk that dispatches those action creators
 export const fetchServices = () => async (dispatch) => {
-  dispatch(servicesLoading());
   try {
     const response = await post("service/filter", { type: "all" });
     if (response.data.success) {

@@ -17,10 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { get, post } from "../../../services/ApiRequest";
 import NoDataFound from "../../../components/NoDataFound";
 import { fetchServices } from "../../../store/reducer/servicesSlice";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const cateogories = useSelector((state) => state?.categories?.categories);
@@ -41,11 +42,9 @@ const Home = () => {
     filterServices(selectedCategory);
   }, [services, selectedCategory]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      dispatch(fetchServices());
-    }, [dispatch])
-  );
+  useEffect(() => {
+    dispatch(fetchServices());
+  }, [isFocused]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);

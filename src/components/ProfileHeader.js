@@ -20,12 +20,14 @@ const ProfileHeader = ({ name, email, img }) => {
         style={[styles.avatar]}
       />
       <View>
-        <CustomText
-          label={userData?.name}
-          fontSize={18}
-          color={colors.black}
-          fontFamily={fonts.semiBold}
-        />
+        {userData?.name && (
+          <CustomText
+            label={userData?.name}
+            fontSize={18}
+            color={colors.black}
+            fontFamily={fonts.semiBold}
+          />
+        )}
 
         <CustomText label={userData?.email} fontSize={14} color={colors.grey} />
       </View>

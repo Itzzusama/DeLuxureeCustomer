@@ -55,10 +55,6 @@ const Profile = () => {
   const [state, setState] = useState(init);
 
   const handleUpdateUser = async () => {
-    if (!state.fName) {
-      ToastMessage("Enter your name");
-      return;
-    }
     setLoading(true);
     try {
       const body = {

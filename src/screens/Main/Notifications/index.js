@@ -16,6 +16,8 @@ import Layout from "../../../components/Layout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { className } from "../../../global-styles";
 import CustomButton from "../../../components/CustomButton";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const Notifications = () => {
   const array = [
@@ -40,7 +42,8 @@ const Notifications = () => {
   ];
   const [notification, setNotification] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const token = useSelector((state) => state?.user?.token);
+  const navigation = useNavigation();
   const getNotifications = async () => {
     setRefreshing(true);
     try {
@@ -60,15 +63,7 @@ const Notifications = () => {
   useEffect(() => {
     getNotifications();
   }, []);
-  const [tokenExists, setTokenExists] = useState(false);
-  useEffect(() => {
-    // Check if token exists in AsyncStorage
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setTokenExists(!!token);
-    };
-    checkToken();
-  }, []);
+
   const fetchMoreNotifications = async () => {
     if (notification?.length > 0) {
       const lastNoti = notification[notification?.length - 1]?._id;
@@ -83,7 +78,7 @@ const Notifications = () => {
       }
     }
   };
-  if (!tokenExists) {
+  if (!token) {
     return (
       <Layout title={"Notification"}>
         <View style={className("flex-1 align-center justify-center ")}>
