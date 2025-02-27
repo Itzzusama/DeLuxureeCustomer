@@ -1,12 +1,11 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Platform } from "react-native";
 import { colors } from "../utils/colors";
 import CustomText from "./CustomText";
 import Icons from "./Icons";
 import fonts from "../assets/fonts";
 import { ToastMessage } from "../utils/ToastMessage";
-import Modal from 'react-native-modal';
 import CustomButton from "./CustomButton";
 import { className } from "../global-styles";
 
@@ -22,12 +21,12 @@ export const DatePicker = ({
   customeStyle,
   error,
   mode = "date",
-  hideDatepicker
+  hideDatepicker,
 }) => {
   const isError =
     error !== undefined && error !== null && error !== true && error !== "";
 
-  const [dateData,setDateData]=useState(new Date())
+  const [dateData, setDateData] = useState(new Date());
 
   return (
     <>
@@ -50,40 +49,58 @@ export const DatePicker = ({
           fontSize={14}
         />
         <Icons
-          name={mode == "date" ? "calendar" : "time-outline"}
-          family={mode == "date" ? "EvilIcons" : "Ionicons"}
-          size={mode == "date" ? 25 : 20}
+          name={mode === "date" ? "calendar" : "time-outline"}
+          family={mode === "date" ? "EvilIcons" : "Ionicons"}
+          size={mode === "date" ? 25 : 20}
           color={colors.grey}
         />
       </TouchableOpacity>
-         <Modal
-         isVisible={show}
-         animationIn="fadeIn"
-         animationOut="fadeOut">
-          <View style={{backgroundColor:"white",borderRadius:20}}>
+
+      {Platform.OS === "android" && show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={dateData}
+          onChange={(event, selectedTime) => {
+            hideDatepicker();
+            if (selectedTime) {
+              setDateData(selectedTime);
+              onChange(selectedTime);
+            }
+          }}
+          minimumDate={minDate || null}
+          maximumDate={maxDate || null}
+          mode={mode}
+          display="spinner"
+        />
+      )}
+
+      {Platform.OS === "ios" && (
+        <Modal isVisible={show} animationIn="fadeIn" animationOut="fadeOut">
+          <View style={{ backgroundColor: "white", borderRadius: 20 }}>
             <DateTimePicker
               testID="dateTimePicker"
               value={dateData}
-              onChange={(event, selectedTime)=>setDateData(selectedTime)}
-              minimumDate={minDate ? minDate : null}
-              maximumDate={maxDate ? maxDate : null}
+              onChange={(event, selectedTime) => setDateData(selectedTime)}
+              minimumDate={minDate || null}
+              maximumDate={maxDate || null}
               mode={mode}
               display="spinner"
             />
             <View style={className("flex align-center justify-evenly my-2")}>
-                <CustomButton
-                 title={"Cancel"}
-                 customStyle={className("w-30 bg-grey")}
-                 onPress={hideDatepicker}
-                 />
-                <CustomButton
-                 title={"Ok"}
-                 customStyle={className("w-30")}
-                 onPress={()=>onChange(dateData)}
-                 />
+              <CustomButton
+                title={"Cancel"}
+                customStyle={className("w-30 bg-grey")}
+                onPress={hideDatepicker}
+              />
+              <CustomButton
+                title={"Ok"}
+                customStyle={className("w-30")}
+                onPress={() => onChange(dateData)}
+              />
             </View>
           </View>
         </Modal>
+      )}
     </>
   );
 };
