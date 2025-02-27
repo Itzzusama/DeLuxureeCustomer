@@ -46,36 +46,33 @@ const BookingForm = () => {
       "isValidNumber",
       "Enter a valid phone number",
       function (value) {
-        if (userData?.phone?.length <= 2) {
-          if (phoneInput.current) {
-            return phoneInput.current.isValidNumber(value);
-          }
-          return false;
+        if (phoneInput.current) {
+          return phoneInput.current.isValidNumber(value);
         }
-        return true;
+        return false;
       }
     ),
   });
 
   const onDateChange = (selectedDate, setFieldValue) => {
-      const dateObj = new Date(selectedDate);
-      const formattedDate = moment(dateObj).format("YYYY-MM-DD");
-      setDateData({ date: formattedDate, modal: false });
-      setFieldValue("bookDate", selectedDate);
+    const dateObj = new Date(selectedDate);
+    const formattedDate = moment(dateObj).format("YYYY-MM-DD");
+    setDateData({ date: formattedDate, modal: false });
+    setFieldValue("bookDate", selectedDate);
   };
 
   const onTimeChange = (selectedTime, setFieldValue) => {
     // if (event.type === "dismissed") {
     //   setTimeData({ ...timeData, modal: false });
     // } else {
-      const timeObj = new Date(selectedTime);
-      const formattedTime = moment(timeObj).format("HH:mm:ss");
+    const timeObj = new Date(selectedTime);
+    const formattedTime = moment(timeObj).format("HH:mm:ss");
 
-      setTimeData({
-        time: formattedTime,
-        modal: false,
-      });
-      setFieldValue("bookTime", selectedTime);
+    setTimeData({
+      time: formattedTime,
+      modal: false,
+    });
+    setFieldValue("bookTime", selectedTime);
     // }
   };
 
@@ -83,7 +80,7 @@ const BookingForm = () => {
     description: "",
     bookDate: "",
     bookTime: "",
-    phoneNumber: userData?.phone?.length > 2 ? userData?.phone : "",
+    phoneNumber: "",
     location: "",
     latLng: {
       latitude: 0,
@@ -92,10 +89,7 @@ const BookingForm = () => {
   });
 
   const handlePress = async (values) => {
-    const formattedNumber =
-      userData?.phone?.length > 2
-        ? userData.phone
-        : phoneInput.current.getNumberAfterPossiblyEliminatingZero();
+    const formattedNumber = phoneInput.current.getNumberAfterPossiblyEliminatingZero();
     const data = {
       note: values.description,
       amount: detail?.price,
@@ -166,23 +160,17 @@ const BookingForm = () => {
           touched,
         }) => (
           <>
-            {userData?.phone?.length <= 2 ? (
-              <>
-                <PhoneNumberInput
-                  phoneInput={phoneInput}
-                  value={values.phoneNumber}
-                  defaultValue={values.phoneNumber}
-                  onChangeText={(text) => {
-                    handleChange("phoneNumber")(text);
-                  }}
-                  error={touched.phoneNumber && errors.phoneNumber}
-                />
-                <Error
-                  error={errors.phoneNumber}
-                  visible={touched.phoneNumber}
-                />
-              </>
-            ) : null}
+            <PhoneNumberInput
+              phoneInput={phoneInput}
+              value={values.phoneNumber}
+              defaultValue={values.phoneNumber}
+              onChangeText={(text) => {
+                handleChange("phoneNumber")(text);
+              }}
+              error={touched.phoneNumber && errors.phoneNumber}
+            />
+            <Error error={errors.phoneNumber} visible={touched.phoneNumber} />
+
             <CustomText
               label={"Booking Date"}
               marginBottom={8}

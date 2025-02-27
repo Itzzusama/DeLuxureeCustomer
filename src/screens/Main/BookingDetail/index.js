@@ -25,7 +25,7 @@ const BookingDetail = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { orderDetail } = route.params || {};
-  console.log(orderDetail);
+
   const color =
     orderDetail?.status === "completed"
       ? colors.green
