@@ -8,6 +8,7 @@ import fonts from "../assets/fonts";
 import { ToastMessage } from "../utils/ToastMessage";
 import CustomButton from "./CustomButton";
 import { className } from "../global-styles";
+import Modal from 'react-native-modal';
 
 export const DatePicker = ({
   date,
