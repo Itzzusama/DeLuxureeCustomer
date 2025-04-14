@@ -94,7 +94,9 @@ const BookingForm = () => {
   });
 
   const handlePress = async (values) => {
-    const formattedNumber = phoneInput.current.getNumberAfterPossiblyEliminatingZero();
+    const {
+      formattedNumber,
+    } = phoneInput.current.getNumberAfterPossiblyEliminatingZero();
     const data = {
       note: values.description,
       amount: detail?.price,
