@@ -81,7 +81,7 @@ const Search = () => {
       console.log(err);
     }
   };
-  console.log(filterData);
+
   return (
     <Layout
       isSafeAreaView={true}

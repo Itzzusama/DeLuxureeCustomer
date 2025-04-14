@@ -30,6 +30,7 @@ const Home = () => {
   const [filterData, setFilterData] = useState(services);
   const loading = useSelector((state) => state?.services?.loading);
   const [tokenExists, setTokenExists] = useState(false);
+  const [search, setSearch] = useState("");
   useEffect(() => {
     // Check if token exists in AsyncStorage
     const checkToken = async () => {
@@ -86,7 +87,7 @@ const Home = () => {
         const newServcies = res.data.services;
         setFilterData([...filterData, ...newServcies]);
       } else {
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     } catch (err) {
       console.log(err);

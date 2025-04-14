@@ -41,7 +41,11 @@ const BookingForm = () => {
   const validationSchema = Yup.object().shape({
     bookDate: Yup.date().required("Booking Date is required"),
     bookTime: Yup.date().required("Booking Time is required"),
-    location: Yup.string().required("Location is required"),
+    location: Yup.string().required("Address is required"),
+    city: Yup.string().required("City is required"),
+    state: Yup.string().required("State is required"),
+    street: Yup.string().required("Street is required"),
+    zip: Yup.string().required("Zip code is required"),
     phoneNumber: Yup.string().test(
       "isValidNumber",
       "Enter a valid phone number",
@@ -62,9 +66,6 @@ const BookingForm = () => {
   };
 
   const onTimeChange = (selectedTime, setFieldValue) => {
-    // if (event.type === "dismissed") {
-    //   setTimeData({ ...timeData, modal: false });
-    // } else {
     const timeObj = new Date(selectedTime);
     const formattedTime = moment(timeObj).format("HH:mm:ss");
 
@@ -73,7 +74,6 @@ const BookingForm = () => {
       modal: false,
     });
     setFieldValue("bookTime", selectedTime);
-    // }
   };
 
   const [initialValues, setInitialValues] = useState({
@@ -86,6 +86,11 @@ const BookingForm = () => {
       latitude: 0,
       longitude: 0,
     },
+    street: "",
+    apartmentnumber: "",
+    city: "",
+    state: "",
+    zip: "",
   });
 
   const handlePress = async (values) => {
@@ -96,8 +101,8 @@ const BookingForm = () => {
       date: values?.bookDate,
       location: {
         address: values?.location,
-        lat: values.latLng.latitude,
-        lng: values.latLng.longitude,
+        lat: 0,
+        lng: 0,
       },
       name: userData?.name,
       phone: formattedNumber,
@@ -231,23 +236,71 @@ const BookingForm = () => {
               error={touched.bookTime && errors.bookTime}
             />
             <Error error={errors.bookTime} visible={touched.bookTime} />
-            <GooglePlaces
-              withLabel={"Location"}
-              marginTop={5}
+            <CustomInput
+              withLabel={"Address"}
+              placeholder={"Address"}
+              onChangeText={handleChange("location")}
+              onBlur={handleBlur("location")}
               value={values.location}
-              setValue={(location) => {
-                setFieldValue("location", location);
-              }}
-              placeholder={"Location"}
-              setLatLong={(latLong) => {
-                setFieldValue("latLng", latLong);
-              }}
               error={touched.location && errors.location}
             />
+
             <Error error={errors.location} visible={touched.location} />
             <CustomInput
+              withLabel={"Street"}
+              placeholder={"Street"}
+              onChangeText={handleChange("street")}
+              onBlur={handleBlur("street")}
+              value={values.street}
+              error={touched.street && errors.street}
+            />
+
+            <Error error={errors.street} visible={touched.street} />
+            <CustomInput
+              withLabel={"Apartment Number"}
+              placeholder={"Apartment Number"}
+              onChangeText={handleChange("apartmentnumber")}
+              onBlur={handleBlur("apartmentnumber")}
+              value={values.apartmentnumber}
+              error={touched.apartmentnumber && errors.apartmentnumber}
+            />
+
+            <Error
+              error={errors.apartmentnumber}
+              visible={touched.apartmentnumber}
+            />
+            <CustomInput
+              withLabel={"City"}
+              placeholder={"City"}
+              onChangeText={handleChange("city")}
+              onBlur={handleBlur("city")}
+              value={values.city}
+              error={touched.city && errors.city}
+            />
+
+            <Error error={errors.city} visible={touched.city} />
+            <CustomInput
+              withLabel={"State"}
+              placeholder={"State"}
+              onChangeText={handleChange("state")}
+              onBlur={handleBlur("state")}
+              value={values.state}
+              error={touched.state && errors.state}
+            />
+
+            <Error error={errors.state} visible={touched.state} />
+            <CustomInput
+              withLabel={"Zip Code"}
+              placeholder={"Zip Code"}
+              onChangeText={handleChange("zip")}
+              onBlur={handleBlur("zip")}
+              value={values.zip}
+              error={touched.zip && errors.zip}
+            />
+
+            <Error error={errors.zip} visible={touched.zip} />
+            <CustomInput
               withLabel={"Notes"}
-              marginTop={5}
               placeholder={"Notes"}
               containerStyle={className("h-30")}
               textAlignVertical={"top"}

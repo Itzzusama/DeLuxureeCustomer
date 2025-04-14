@@ -155,21 +155,6 @@ const ProviderDetail = () => {
           marginBottom={8}
           marginTop={6}
         />
-        <CustomText
-          label={"Location"}
-          fontSize={16}
-          color={colors.black}
-          fontFamily={fonts.bold}
-          marginTop={10}
-        />
-        <CustomText
-          label={detail?.address}
-          fontSize={13}
-          fontFamily={fonts.medium}
-          color={colors.second_black}
-          marginBottom={8}
-          marginTop={6}
-        />
       </View>
     </Layout>
   );

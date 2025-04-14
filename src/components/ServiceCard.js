@@ -143,8 +143,8 @@ const ServiceCard = ({
               fontSize={12}
             />
           ) : (
-            <View style={className("flex align-center")}>
-              {isOrder ? (
+            <View style={className("flex align-center mt-2")}>
+              {isOrder &&
                 (order?.status == "pending" ||
                   order?.status == "complete_request") && (
                   <TouchableOpacity
@@ -169,26 +169,7 @@ const ServiceCard = ({
                       />
                     )}
                   </TouchableOpacity>
-                )
-              ) : (
-                <>
-                  <Image
-                    source={Images.pin}
-                    style={[
-                      className("h-4 w-4"),
-                      { tintColor: colors.grey2, resizeMode: "contain" },
-                    ]}
-                  />
-                  <CustomText
-                    label={item?.address}
-                    fontSize={12}
-                    color={colors.grey}
-                    marginLeft={2}
-                    numberOfLines={1}
-                    width={160}
-                  />
-                </>
-              )}
+                )}
             </View>
           )}
           {isOrder ? (
@@ -212,10 +193,7 @@ const ServiceCard = ({
               label={`$${item?.price}`}
               color={colors.headLine}
               fontFamily={fonts.semiBold}
-              containerStyle={[
-                className("bg-lightGreen p-1 px-2 rounded-2"),
-                { position: "absolute", right: 4 },
-              ]}
+              containerStyle={[className("bg-lightGreen p-1 px-2 rounded-2")]}
             />
           )}
         </View>
