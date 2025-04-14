@@ -109,6 +109,11 @@ const BookingForm = () => {
       service: detail?._id,
       time: values?.bookTime,
       category: detail?.cat?._id,
+      street: values?.street,
+      apartmentnumber: values?.apartmentnumber,
+      city: values?.city,
+      state: values?.state,
+      zip: values?.zip,
     };
 
     const apiData = {
