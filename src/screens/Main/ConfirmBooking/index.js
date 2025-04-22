@@ -63,7 +63,7 @@ const ConfirmBooking = () => {
         ...reqData,
         paymentId: paymentId,
       };
-      console.log(ApiData);
+
       try {
         const res = await post("order/create", ApiData);
         if (res.data.success) {
@@ -132,10 +132,9 @@ const ConfirmBooking = () => {
           </View>
         </View>
 
-        {/* <EventDetail /> */}
         <PriceDetail price={detail?.price} />
       </View>
-      {/* <PaymentCard /> */}
+
       <CustomButton
         title={"Pay Now"}
         customStyle={className("my-10")}

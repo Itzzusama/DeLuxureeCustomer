@@ -25,7 +25,7 @@ import { useSelector } from "react-redux";
 const BookingForm = () => {
   const route = useRoute();
   const userData = useSelector((state) => state?.user?.loginUser);
-  const { detail } = route.params;
+  const { detail } = route?.params;
   const phoneInput = useRef(null);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -41,7 +41,6 @@ const BookingForm = () => {
   const validationSchema = Yup.object().shape({
     bookDate: Yup.date().required("Booking Date is required"),
     bookTime: Yup.date().required("Booking Time is required"),
-    location: Yup.string().required("Address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string().required("State is required"),
     street: Yup.string().required("Street is required"),
@@ -102,7 +101,7 @@ const BookingForm = () => {
       amount: detail?.price,
       date: values?.bookDate,
       location: {
-        address: values?.location,
+        address: "",
         lat: 0,
         lng: 0,
       },
@@ -244,15 +243,25 @@ const BookingForm = () => {
             />
             <Error error={errors.bookTime} visible={touched.bookTime} />
             <CustomInput
-              withLabel={"Address"}
-              placeholder={"Address"}
-              onChangeText={handleChange("location")}
-              onBlur={handleBlur("location")}
-              value={values.location}
-              error={touched.location && errors.location}
+              withLabel={"City"}
+              placeholder={"City"}
+              onChangeText={handleChange("city")}
+              onBlur={handleBlur("city")}
+              value={values.city}
+              error={touched.city && errors.city}
             />
 
-            <Error error={errors.location} visible={touched.location} />
+            <Error error={errors.city} visible={touched.city} />
+            <CustomInput
+              withLabel={"State"}
+              placeholder={"State"}
+              onChangeText={handleChange("state")}
+              onBlur={handleBlur("state")}
+              value={values.state}
+              error={touched.state && errors.state}
+            />
+
+            <Error error={errors.state} visible={touched.state} />
             <CustomInput
               withLabel={"Street"}
               placeholder={"Street"}
@@ -276,26 +285,7 @@ const BookingForm = () => {
               error={errors.apartmentnumber}
               visible={touched.apartmentnumber}
             />
-            <CustomInput
-              withLabel={"City"}
-              placeholder={"City"}
-              onChangeText={handleChange("city")}
-              onBlur={handleBlur("city")}
-              value={values.city}
-              error={touched.city && errors.city}
-            />
 
-            <Error error={errors.city} visible={touched.city} />
-            <CustomInput
-              withLabel={"State"}
-              placeholder={"State"}
-              onChangeText={handleChange("state")}
-              onBlur={handleBlur("state")}
-              value={values.state}
-              error={touched.state && errors.state}
-            />
-
-            <Error error={errors.state} visible={touched.state} />
             <CustomInput
               withLabel={"Zip Code"}
               placeholder={"Zip Code"}
