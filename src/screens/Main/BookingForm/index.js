@@ -116,7 +116,6 @@ const BookingForm = () => {
       state: values?.state,
       zip: values?.zip,
     };
-
     const apiData = {
       category: detail?.cat?._id,
       day: moment().format("ddd"),

@@ -23,7 +23,7 @@ import { ToastMessage } from "../../../utils/ToastMessage";
 const ConfirmBooking = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const route = useRoute();
-  const { reqData, detail } = route.params;
+  const { reqData, detail } = route?.params;
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const handleSubmit = async () => {

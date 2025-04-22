@@ -23,6 +23,7 @@ import { get } from "../../../services/ApiRequest";
 import { useRoute } from "@react-navigation/native";
 import { formatDate, formatRelativeDate } from "../../../utils/dateUtils";
 import fonts from "../../../assets/fonts";
+import { endPoints } from "../../../services/ENV";
 
 const Inbox = () => {
   const route = useRoute();
@@ -96,7 +97,7 @@ const Inbox = () => {
   };
 
   useEffect(() => {
-    const newSocket = io("https://deluxcleaning.onrender.com");
+    const newSocket = io(endPoints?.socket_BASE_URL);
 
     newSocket.on("connect", async () => {
       const token = await AsyncStorage.getItem("token");
